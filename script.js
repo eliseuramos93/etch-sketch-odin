@@ -86,7 +86,7 @@ function changeGridSize() {
 }
 
 function createSidebarButton(buttonText, id) {
-  button = document.createElement('button');
+  button = document.createElement('div');
   button.textContent = buttonText;
   button.classList.add('sidebar-button');
   button.setAttribute('id', id)
@@ -100,19 +100,6 @@ changeGridButton.addEventListener('click', () => {
   canvas.replaceChildren(); 
   createGrid(gridSize);
 })
-
-/* == 4 == 
-Create a rainbow option (random rgb color after each pass)
-
-[OK] Generate a random number between 0 and 255;
-[OK] Generate a random RGB color;
-[OK] Create a boolean variable to monitor if rainbow mode is on or off;
-[OK] Create a button w/ id "rainbow-mode";
-[OK] Create a button w/ id "normal-mode";
-[OK] Create an event if the button is clicked;
-[OK] Adjust paintGrid function to black if boolean = false, and random if true;
-
-*/
 
 function getRandomNumber() {
   return Math.floor(Math.random() * 256);

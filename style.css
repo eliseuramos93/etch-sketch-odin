@@ -3,8 +3,6 @@
 *::before {
   margin: 0;
   box-sizing: border-box;
-  font-family: Helvetica, sans-serif;
-  color: #f5f5f5;
 }
 
 body,
@@ -15,7 +13,7 @@ body,
   margin: 0;
   align-items: center;
   justify-content: center;
-  border: 5px solid gold;
+  font-family: Helvetica, sans-serif;
 }
 
 body {
@@ -27,6 +25,17 @@ body {
 #footer {
   padding: 100px;
   width: 860px;
+}
+
+#header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 100px 50px 100px;
+  color: white;
+  font-size: 72px;
+  font-weight: 700;
+  font-family: Helvetica, sans-serif;
 }
 
 #container {
@@ -41,7 +50,6 @@ body {
 #sidebar {
   padding: 50px;
   height: 500px;
-  border: 5px solid gold;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
@@ -51,12 +59,24 @@ body {
 }
 
 .sidebar-button {
+  font-family: Helvetica, sans-serif;
   background-color: #666;
+  color: #FFF;
   padding: 8px 24px;
   border-radius: 5px;
   font-size: 1rem;
   width: 250px;
+  transition: all 0.2s ease;
+  text-align: center;
 }
+
+.sidebar-button:hover {
+  background-color: #FFF;
+  color: #666;
+  scale: 1.05;
+  border: 1px solid gold;
+}
+
 #canvas {
   display: flex;
   align-items: center;
@@ -64,6 +84,8 @@ body {
   width: 500px;
   height: 500px;
   background-color: #FFFFFF;
+  border: 10px double black;
+  box-sizing: content-box;
 }
 
 .column {
@@ -78,4 +100,20 @@ body {
 .row {
   width: 100%;
   flex: 1;
+}
+
+#footer {
+  font-size: 16px;
+  color: #FFF;
+}
+
+#footer a {
+  text-decoration: none;
+  color: #FFF;
+  transition: all 0.2s ease;
+}
+
+#footer a i:hover {
+  color: gold;
+  scale: 1.5;
 }
