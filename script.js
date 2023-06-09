@@ -151,4 +151,12 @@ eraserModeButton.addEventListener('click', () => {
   eraserMode = true;
 });
 
+createSidebarButton('Clear Canvas', 'clear-all');
+const clearButton = document.querySelector('#clear-all');
+
+clearButton.addEventListener('click', () => {
+  canvas.replaceChildren();
+  createGrid(gridSize);
+});
+
 createGrid(gridSize);
