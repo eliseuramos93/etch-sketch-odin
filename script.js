@@ -1,7 +1,7 @@
 /*==============================================================================
 1 [OK] create a webpage with a 16x16 of square grids
   1.1 [OK] create the divs using javascript
-2 [ ] set up a hover effect that the grid divs change color when the mouse 
+2 [OK] set up a hover effect that the grid divs change color when the mouse 
 passes over them
 3 [ ] add a button to the top of the screen that will send the user a popup 
 asking for the number of squares per side for the new grid
@@ -11,6 +11,7 @@ asking for the number of squares per side for the new grid
 ==============================================================================*/
 
 /* == 1 == 
+Create a webpage with a 16x16 of square grids.
 
 [OK] save the #canvas reference into a variable;
 [OK] create a variable with the grid size
@@ -20,9 +21,10 @@ asking for the number of squares per side for the new grid
 
 */
 
-const canvas = document.querySelector('#canvas');
-let gridSize = 100; //later will change to a user input;
+let canvas = document.querySelector('#canvas');
+let gridSize = 16; //later will change to a user input;
 let column;
+let columns;
 let row;
 
 function createColumn(gridSize) {
@@ -33,22 +35,36 @@ function createColumn(gridSize) {
   }
 }
 
+function enablePainting() {
+  columns = document.querySelectorAll('.column');
+  columns.forEach(column => {
+    let rows = column.querySelectorAll('.row');
+    rows.forEach(row => paintGrid(row));
+  });
+}
+
 function createGrid(gridSize) {
   for (let index = 0; index < gridSize; index++) {
     column = document.createElement('div');
     column.classList.add('column', `index${index}`);
     createColumn(gridSize);
     canvas.appendChild(column);
-  }
+  };
+
+  enablePainting();
 }
 
 createGrid(gridSize);
 
 /* == 2 == 
+Set up a “hover” effect so that the grid divs change color when your mouse 
+passes over them, leaving a (pixelated) trail through your grid like a pen 
+would.
 
 [OK] capture the moment when the mouse is over each individual block;
 [OK] set up a variable to determine if the left-button is being pressed
-[OK] set up a trigger for changing the background-color on mouseover w/ mousedown
+[OK] set up a trigger for changing the background-color on mouseover w/ 
+mousedown
 
 => stack-overflow ref 4 mouse is down:
 https://stackoverflow.com/questions/47641309/combine-mouse-events-in-javascript
@@ -71,8 +87,62 @@ function paintGrid(element) {
     });
 }
 
-const columns = document.querySelectorAll('.column');
-columns.forEach(column => {
-  let rows = column.querySelectorAll('.row');
-  rows.forEach(row => paintGrid(row));
-});
+/* == 3 == 
+Add a button to the top of the screen that will send the user a popup 
+asking for the number of squares per side for the new grid.
+
+[OK] create a button to change the grid size of the canvas;
+  [OK] create a variable to receive the div button;
+  [OK] create the element, assigning it to the variable;
+  [OK] insert a text inside the div so the user knows the function of the button;
+  [OK] append it to the sidebar;
+  [OK] adjust .sidebar css to position the button
+[OK] create a function to ask the user the pixel size;
+  [OK] reject non-numerical inputs;
+  [OK] reject non-integer inputs;
+  [OK] reject inputs lower than 16;
+  [OK] reject inputs higher than 100;
+[OK] run the function when the user clicks the changeGrid button;
+[OK] return the input value from the user in the gridSize variable;
+
+=> stack-overflow ref 4 mouse is down:
+https://stackoverflow.com/questions/47641309/combine-mouse-events-in-javascript
+
+*/
+
+const sidebar = document.querySelector('#sidebar');
+let button;
+
+function createSidebarButton(buttonText, id) {
+  button = document.createElement('button');
+  button.textContent = buttonText;
+  button.classList.add('sidebar-button');
+  button.setAttribute('id', id)
+  sidebar.appendChild(button);
+}
+
+function askNumberFromUser() {
+  let keepGoing = true
+  while (keepGoing === true) {
+    userInput = prompt(`Choose a grid size (min: 16, max: 100):`);
+    if (parseInt(userInput) >= 16 && parseInt(userInput) <= 100) {
+      keepGoing = false;
+      return parseInt(userInput);
+    } else {
+      alert('Invalid input. Please entry a number between 16 and 100.');
+    }
+  }
+}
+
+function changeGridSize() {
+  const userInput = askNumberFromUser();
+  return userInput;
+}
+
+createSidebarButton('Change Grid Size', 'change-grid-size');
+const changeGridButton = document.querySelector('#change-grid-size');
+changeGridButton.addEventListener('click', () => {
+  gridSize = changeGridSize();
+  canvas.replaceChildren(); // delete the existing grid;
+  createGrid(gridSize);
+})
