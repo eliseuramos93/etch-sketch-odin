@@ -38,10 +38,12 @@ function changeColor(element, color) {
 
 function paintGrid(element) {
     element.addEventListener('mouseover', () => {
-      if (rainbowMode === false){
+      if (normalMode === true){
         changeColor(element, 'black');
-      } else {
+      } else if (rainbowMode === true) {
         changeColor(element, getRandomColor());
+      } else {
+        changeColor(element, 'white');
       }
     });
 }
@@ -124,10 +126,29 @@ createSidebarButton('Normal Sketch Mode', 'normal-mode');
 const normalModeButton = document.querySelector('#normal-mode');
 createSidebarButton('Rainbow Mode', 'rainbow-mode');
 const rainbowModeButton = document.querySelector('#rainbow-mode');
+createSidebarButton('Eraser Mode', 'eraser-mode');
+const eraserModeButton = document.querySelector('#eraser-mode');
 
+let normalMode = true
 let rainbowMode = false;
+let eraserMode = false
 
-rainbowModeButton.addEventListener('click', () => {rainbowMode = true});
-normalModeButton.addEventListener('click', () => {rainbowMode = false});
+normalModeButton.addEventListener('click', () => {
+  normalMode = true;
+  rainbowMode = false;
+  eraserMode = false;
+});
+
+rainbowModeButton.addEventListener('click', () => {
+  rainbowMode = true;
+  normalMode = false;
+  eraserMode = false;
+});
+
+eraserModeButton.addEventListener('click', () => {
+  rainbowMode = false;
+  normalMode = false;
+  eraserMode = true;
+});
 
 createGrid(gridSize);
