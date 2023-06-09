@@ -47,6 +47,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 15px;
 }
 
 .sidebar-button {
@@ -54,6 +55,7 @@ body {
   padding: 8px 24px;
   border-radius: 5px;
   font-size: 1rem;
+  width: 250px;
 }
 #canvas {
   display: flex;

@@ -3,29 +3,24 @@
   1.1 [OK] create the divs using javascript
 2 [OK] set up a hover effect that the grid divs change color when the mouse 
 passes over them
-3 [ ] add a button to the top of the screen that will send the user a popup 
+3 [OK] add a button to the top of the screen that will send the user a popup 
 asking for the number of squares per side for the new grid
-  3.1 [ ] set the maximum value to 100
-4 [ ] create a rainbow option (random rgb color after each pass)
+  3.1 [OK] set the maximum value to 100
+4 [OK] create a rainbow option (random rgb color after each pass)
 5 [ ] create a 10% increment per pass rule to create a fade-in effect
 ==============================================================================*/
 
-/* == 1 == 
-Create a webpage with a 16x16 of square grids.
-
-[OK] save the #canvas reference into a variable;
-[OK] create a variable with the grid size
-[OK] create a variable for the grid column and grid row
-[OK] create the necessary amount of rows in each column
-[OK] create the necessary amount of columns in the canvas 
-
-*/
-
 let canvas = document.querySelector('#canvas');
-let gridSize = 16; //later will change to a user input;
+const sidebar = document.querySelector('#sidebar');
+let gridSize = 16; 
 let column;
 let columns;
 let row;
+let button;
+
+let mouseIsDown = false;
+window.addEventListener('mousedown', () => {mouseIsDown = true});
+window.addEventListener('mouseup', () => {mouseIsDown = false})
 
 function createColumn(gridSize) {
   for (let index = 0; index < gridSize; index++) {
@@ -33,6 +28,22 @@ function createColumn(gridSize) {
     row.classList.add('row', `index${index}`);
     column.appendChild(row);
   }
+}
+
+function changeColor(element, color) {
+  if (mouseIsDown){
+    element.setAttribute('style', `background-color: ${color}`);
+  }
+}
+
+function paintGrid(element) {
+    element.addEventListener('mouseover', () => {
+      if (rainbowMode === false){
+        changeColor(element, 'black');
+      } else {
+        changeColor(element, getRandomColor());
+      }
+    });
 }
 
 function enablePainting() {
@@ -54,73 +65,6 @@ function createGrid(gridSize) {
   enablePainting();
 }
 
-createGrid(gridSize);
-
-/* == 2 == 
-Set up a “hover” effect so that the grid divs change color when your mouse 
-passes over them, leaving a (pixelated) trail through your grid like a pen 
-would.
-
-[OK] capture the moment when the mouse is over each individual block;
-[OK] set up a variable to determine if the left-button is being pressed
-[OK] set up a trigger for changing the background-color on mouseover w/ 
-mousedown
-
-=> stack-overflow ref 4 mouse is down:
-https://stackoverflow.com/questions/47641309/combine-mouse-events-in-javascript
-
-*/
-
-let mouseIsDown = false;
-window.addEventListener('mousedown', () => {mouseIsDown = true});
-window.addEventListener('mouseup', () => {mouseIsDown = false})
-
-function changeColor(element, color) {
-  if (mouseIsDown){
-    element.setAttribute('style', `background-color: ${color}`);
-  }
-}
-
-function paintGrid(element) {
-    element.addEventListener('mouseover', () => {
-      changeColor(element, 'black');
-    });
-}
-
-/* == 3 == 
-Add a button to the top of the screen that will send the user a popup 
-asking for the number of squares per side for the new grid.
-
-[OK] create a button to change the grid size of the canvas;
-  [OK] create a variable to receive the div button;
-  [OK] create the element, assigning it to the variable;
-  [OK] insert a text inside the div so the user knows the function of the button;
-  [OK] append it to the sidebar;
-  [OK] adjust .sidebar css to position the button
-[OK] create a function to ask the user the pixel size;
-  [OK] reject non-numerical inputs;
-  [OK] reject non-integer inputs;
-  [OK] reject inputs lower than 16;
-  [OK] reject inputs higher than 100;
-[OK] run the function when the user clicks the changeGrid button;
-[OK] return the input value from the user in the gridSize variable;
-
-=> stack-overflow ref 4 mouse is down:
-https://stackoverflow.com/questions/47641309/combine-mouse-events-in-javascript
-
-*/
-
-const sidebar = document.querySelector('#sidebar');
-let button;
-
-function createSidebarButton(buttonText, id) {
-  button = document.createElement('button');
-  button.textContent = buttonText;
-  button.classList.add('sidebar-button');
-  button.setAttribute('id', id)
-  sidebar.appendChild(button);
-}
-
 function askNumberFromUser() {
   let keepGoing = true
   while (keepGoing === true) {
@@ -139,10 +83,51 @@ function changeGridSize() {
   return userInput;
 }
 
+function createSidebarButton(buttonText, id) {
+  button = document.createElement('button');
+  button.textContent = buttonText;
+  button.classList.add('sidebar-button');
+  button.setAttribute('id', id)
+  sidebar.appendChild(button);
+}
+
 createSidebarButton('Change Grid Size', 'change-grid-size');
 const changeGridButton = document.querySelector('#change-grid-size');
 changeGridButton.addEventListener('click', () => {
   gridSize = changeGridSize();
-  canvas.replaceChildren(); // delete the existing grid;
+  canvas.replaceChildren(); 
   createGrid(gridSize);
 })
+
+/* == 4 == 
+Create a rainbow option (random rgb color after each pass)
+
+[OK] Generate a random number between 0 and 255;
+[OK] Generate a random RGB color;
+[OK] Create a boolean variable to monitor if rainbow mode is on or off;
+[OK] Create a button w/ id "rainbow-mode";
+[OK] Create a button w/ id "normal-mode";
+[OK] Create an event if the button is clicked;
+[OK] Adjust paintGrid function to black if boolean = false, and random if true;
+
+*/
+
+function getRandomNumber() {
+  return Math.floor(Math.random() * 256);
+}
+
+function getRandomColor() {
+  return `RGB(${getRandomNumber()}, ${getRandomNumber()}, ${getRandomNumber()})`;
+}
+
+createSidebarButton('Normal Sketch Mode', 'normal-mode');
+const normalModeButton = document.querySelector('#normal-mode');
+createSidebarButton('Rainbow Mode', 'rainbow-mode');
+const rainbowModeButton = document.querySelector('#rainbow-mode');
+
+let rainbowMode = false;
+
+rainbowModeButton.addEventListener('click', () => {rainbowMode = true});
+normalModeButton.addEventListener('click', () => {rainbowMode = false});
+
+createGrid(gridSize);
